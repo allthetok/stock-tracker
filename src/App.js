@@ -1,10 +1,14 @@
 import './App.css'
-import React from 'react'
+import React, { useState } from 'react'
 import Dashboard from './components/Dashboard'
+import ThemeContext from './context/ThemeContext'
 
 function App() {
+    const [darkMode, setDarkMode] = useState(false)
     return (
-        <Dashboard/>
+        <ThemeContext.Provider value={{ darkMode, setDarkMode }}>
+            <Dashboard/>
+        </ThemeContext.Provider>
     )
 }
 
