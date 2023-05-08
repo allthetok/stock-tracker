@@ -1,14 +1,14 @@
 /* eslint-disable no-unused-vars */
 import React, { useContext, useState } from 'react'
-import { mockSearchResults } from '../constants/mock'
 import { XIcon, SearchIcon } from '@heroicons/react/solid'
 import SearchResults from './SearchResults'
 import ThemeContext from '../context/ThemeContext'
+import { searchSymbols } from '../api/stock-api'
 
 
 const Search = () => {
     const [input, setInput] = useState('')
-    const [bestMatches, setBestMatches] = useState(mockSearchResults.result)
+    const [bestMatches, setBestMatches] = useState([])
 
     const { darkMode } = useContext(ThemeContext)
 
@@ -17,8 +17,18 @@ const Search = () => {
         setBestMatches([])
     }
 
-    const updateBestMatches = () => {
-        setBestMatches(mockSearchResults.result)
+    const updateBestMatches = async () => {
+        try {
+            if (input) {
+                const searchResults = await searchSymbols(input)
+                const result = searchResults.result
+                setBestMatches(result)
+            }
+        }
+        catch (err) {
+            setBestMatches([])
+            console.log(err)
+        }
     }
     return( <div className={`flex items-center my-4 border-2 rounded-md relative z-50 w-96 ${darkMode ? 'bg-gray-900 border-gray-800' : 'bg-white border-neutral-200'}`}>
         <input
